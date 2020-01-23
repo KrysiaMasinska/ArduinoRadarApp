@@ -16,9 +16,9 @@ namespace ArduionoRadar
         #region Private variable
         private DispatcherTimer _dispatcherTimer = new DispatcherTimer();
         private SerialPort _serialPort;
-        static string _connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
-        private MySqlConnection mySQLConnection = new MySqlConnection(_connectionString);
-        private MySqlCommand cmd;
+        private static string _connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
+        private MySqlConnection _mySqlConnection = new MySqlConnection(_connectionString);
+        private MySqlCommand _cmd;
         #endregion
 
         #region Public variable
@@ -157,8 +157,8 @@ namespace ArduionoRadar
         {
             try
             {
-                mySQLConnection.Open();
-                if (mySQLConnection.State == ConnectionState.Open)
+                _mySqlConnection.Open();
+                if (_mySqlConnection.State == ConnectionState.Open)
                 {
 
                     ConnectLabel.Foreground = System.Windows.Media.Brushes.Green;
@@ -179,11 +179,11 @@ namespace ArduionoRadar
         {
             try
             {
-                cmd = mySQLConnection.CreateCommand();
-                cmd.CommandText = "insert into arduino(Angle,Distance) values(@Angle,@Distance)";
-                cmd.Parameters.AddWithValue("@Angle", Angle);
-                cmd.Parameters.AddWithValue("@Distance", Distance);
-                cmd.ExecuteNonQuery();
+                _cmd = _mySqlConnection.CreateCommand();
+                _cmd.CommandText = "insert into arduino(Angle,Distance) values(@Angle,@Distance)";
+                _cmd.Parameters.AddWithValue("@Angle", Angle);
+                _cmd.Parameters.AddWithValue("@Distance", Distance);
+                _cmd.ExecuteNonQuery();
             }
             catch (MySqlException es)
             {
