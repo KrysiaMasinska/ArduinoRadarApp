@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.IO.Ports;
@@ -128,9 +129,9 @@ namespace ArduionoRadar
                     TextBox.Text = _serialPort.ReadExisting();
                     string[] wiersze = TextBox.Text.Split(dot);
                     //string[] wiersze = text.Split(dot);
-                    for (int i = 0; i < wiersze.Length; i++)
+                    foreach (var wiersz in wiersze)
                     {
-                        string[] ad = wiersze[i].Split(space);
+                        string[] ad = wiersz.Split(space);
                         if (ad.Length == 2)
                         {
                             if (ad[0] != "" && ad[1] != "")
@@ -144,6 +145,22 @@ namespace ArduionoRadar
                             }
                         }
                     }
+                    //for (int i = 0; i < wiersze.Length; i++)
+                    //{
+                    //    string[] ad = wiersze[i].Split(space);
+                    //    if (ad.Length == 2)
+                    //    {
+                    //        if (ad[0] != "" && ad[1] != "")
+                    //        {
+                    //            Angle = Convert.ToInt32(ad[0]);
+                    //            Distance = Convert.ToInt32(ad[1]);
+
+                    //            QueryExectuded();
+                    //            Angle = 0;
+                    //            Distance = 0;
+                    //        }
+                    //    }
+                    //}
                     TextBox.Clear();
                 }
             }
