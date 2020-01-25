@@ -87,7 +87,7 @@ namespace ArduionoRadar
         private void ReciveSend_Click(object sender, RoutedEventArgs e)
         {
 
-            _dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
+            _dispatcherTimer.Interval = TimeSpan.FromSeconds(1);//timer = 1 second
             _dispatcherTimer.Tick += _dispatcherTimer_Tick;
             _dispatcherTimer.Start();
         }
@@ -121,14 +121,15 @@ namespace ArduionoRadar
         {
             try
             {
-                if (_serialPort.IsOpen)
+                if (!_serialPort.IsOpen)
                 {
-                    //string text = "76 34.";
+                    string text = "76 34.32 34.56 78.";
                     char space = ' ';
                     char dot = '.';
-                    TextBox.Text = _serialPort.ReadExisting();
-                    string[] wiersze = TextBox.Text.Split(dot);
-                    //string[] wiersze = text.Split(dot);
+                    Richtextbox.AppendText(text);
+                    //Richtextbox.AppendText(_serialPort.ReadExisting());
+                    //string[] wiersze = TextBox.Text.Split(dot);
+                    string[] wiersze = text.Split(dot);
                     foreach (var wiersz in wiersze)
                     {
                         string[] ad = wiersz.Split(space);
@@ -161,7 +162,7 @@ namespace ArduionoRadar
                     //        }
                     //    }
                     //}
-                    TextBox.Clear();
+                    Richtextbox.Document.Blocks.Clear();
                 }
             }
             catch (Exception es)

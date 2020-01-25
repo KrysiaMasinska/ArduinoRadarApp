@@ -37,7 +37,7 @@
                 <Image Source=".\Icons\refresh.png" RenderTransformOrigin="0.419,0.452"></Image>
             </Grid>
         </Button>
-        <Label Name="ConnectLabel" Content="Connect" Margin="5,170,0,4" HorizontalAlignment="Left" Foreground="White" FontSize="14"/>
+        <Label Name="ConnectLabel" Content="Connect" Margin="5,173,0,1" HorizontalAlignment="Left" Foreground="White" FontSize="14"/>
         <ComboBox Name="ComboPorts" HorizontalAlignment="Left" Margin="85,55,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
         <Label Content="Serial Port:" Margin="5,50,0,124" HorizontalAlignment="Left" Width="75" Foreground="White" FontSize="14"/>
         <Image  Source=".\Icons\arduino.png" Stretch="Fill"  HorizontalAlignment="Left" Height="46" Margin="35,-6,0,0" VerticalAlignment="Top" Width="90" RenderTransformOrigin="0,0.143">
@@ -50,6 +50,12 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <TextBox Name="TextBox" HorizontalAlignment="Left" Height="85" Margin="15,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310"/>
+        <RichTextBox x:Name="Richtextbox" HorizontalAlignment="Left" Height="92" Margin="10,88,0,0" VerticalAlignment="Top" Width="315">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text=""/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
     </Grid>
 </Window>
