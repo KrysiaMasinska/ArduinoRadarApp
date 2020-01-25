@@ -121,9 +121,9 @@ namespace ArduionoRadar
         {
             try
             {
-                if (!_serialPort.IsOpen)//for symulation
+                if (!_serialPort.IsOpen)//for test
                 {
-                    string text = "76 34.32 34.56 78.";//for symulation
+                    string text = "76 34.32 34.56 78.";//for test
                     char space = ' ';
                     char dot = '.';
                     Richtextbox.AppendText(text);
