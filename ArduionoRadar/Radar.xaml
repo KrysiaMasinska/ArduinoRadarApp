@@ -50,12 +50,6 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <RichTextBox x:Name="Richtextbox" HorizontalAlignment="Left" Height="92" Margin="10,88,0,0" VerticalAlignment="Top" Width="315">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text=""/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
+        <TextBox x:Name="TextBox" HorizontalAlignment="Left" Height="90" Margin="15,90,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="305"/>
     </Grid>
 </Window>

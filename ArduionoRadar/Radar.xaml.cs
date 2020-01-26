@@ -20,11 +20,37 @@ namespace ArduionoRadar
         private static string _connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
         private MySqlConnection _mySqlConnection = new MySqlConnection(_connectionString);
         private MySqlCommand _cmd;
+        private int _angle;
+        private int _distance;
+        private int _id;
+        private int _count;
+
         #endregion
 
         #region Public variable
-        public object Angle { get; private set; } = 0;
-        public object Distance { get; private set; } = 0;
+        public int Angle
+        {
+            get { return _angle; }
+            set { _angle = value; }
+        }
+        public int Distance
+        {
+            get { return _distance; }
+            set { _distance = value; }
+        }
+
+        public int Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+
+        public int Count
+        {
+            get { return _count; }
+            set { _count = value; }
+        }
+
         #endregion
 
         public Radar()
@@ -90,6 +116,7 @@ namespace ArduionoRadar
             _dispatcherTimer.Interval = TimeSpan.FromSeconds(1);//timer = 1 second
             _dispatcherTimer.Tick += _dispatcherTimer_Tick;
             _dispatcherTimer.Start();
+            //RecivAndSend();
         }
 
         private void _dispatcherTimer_Tick(object sender, EventArgs e)
@@ -121,31 +148,44 @@ namespace ArduionoRadar
         {
             try
             {
-                if (!_serialPort.IsOpen)//for test
+                if (_serialPort.IsOpen)//for test
                 {
-                    string text = "76 34.32 34.56 78.";//for test
+
+                    //string text = "76 34.32 34.56 78.";//for test
                     char space = ' ';
                     char dot = '.';
-                    Richtextbox.AppendText(text);
-                    //Richtextbox.AppendText(_serialPort.ReadExisting());
-                    //string[] wiersze = TextBox.Text.Split(dot);
-                    string[] wiersze = text.Split(dot);
+                    TextBox.Text = _serialPort.ReadExisting();
+                    string[] wiersze = TextBox.Text.Split(dot);
+                    //string[] wiersze = text.Split(dot);
+                    Count = 1;
                     foreach (var wiersz in wiersze)
                     {
-                        string[] ad = wiersz.Split(space);
-                        if (ad.Length == 2)
+                        if (Count < 101)
                         {
-                            if (ad[0] != "" && ad[1] != "")
+                            string[] ad = wiersz.Split(space);
+                            if (ad.Length == 2)
                             {
-                                Angle = Convert.ToInt32(ad[0]);
-                                Distance = Convert.ToInt32(ad[1]);
+                                if (ad[0] != "" && ad[1] != "")
+                                {
+                                    Angle = Convert.ToInt32(ad[0]);
+                                    Distance = Convert.ToInt32(ad[1]);
 
-                                QueryExectuded();
-                                Angle = 0;
-                                Distance = 0;
+                                    QueryExectuded(Angle, Distance, Count);
+                                    Angle = 0;
+                                    Distance = 0;
+                                }
                             }
+                            Count++;
                         }
+                        else
+                        {
+                            Count = 0;
+                        }
+
                     }
+                    TextBox.Clear();
+                }     
+                        
                     //for (int i = 0; i < wiersze.Length; i++)
                     //{
                     //    string[] ad = wiersze[i].Split(space);
@@ -162,8 +202,7 @@ namespace ArduionoRadar
                     //        }
                     //    }
                     //}
-                    Richtextbox.Document.Blocks.Clear();
-                }
+                    
             }
             catch (Exception es)
             {
@@ -193,14 +232,16 @@ namespace ArduionoRadar
         /// <summary>
         /// Execute command into database
         /// </summary>
-        private void QueryExectuded()
+        private void QueryExectuded(int angle, int distance, int id)
         {
             try
             {
                 _cmd = _mySqlConnection.CreateCommand();
-                _cmd.CommandText = "insert into arduino(Angle,Distance) values(@Angle,@Distance)";
+                // _cmd.CommandText = "insert into arduino(Angle,Distance) values(@Angle,@Distance)";
+                _cmd.CommandText = "UPDATE arduino SET Angle=@Angle,Distance=@Distance WHERE id =@Id";
                 _cmd.Parameters.AddWithValue("@Angle", Angle);
                 _cmd.Parameters.AddWithValue("@Distance", Distance);
+                _cmd.Parameters.AddWithValue("@Id",Count);
                 _cmd.ExecuteNonQuery();
             }
             catch (MySqlException es)
