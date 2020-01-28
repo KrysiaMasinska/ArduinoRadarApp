@@ -47,7 +47,7 @@ namespace ArduionoRadar
 
         public int Count
         {
-            get { return _count; }
+            get { return _count= int.Parse(ConfigurationManager.AppSettings["Count"]); }
             set { _count = value; }
         }
 
@@ -157,10 +157,10 @@ namespace ArduionoRadar
                     TextBox.Text = _serialPort.ReadExisting();
                     string[] wiersze = TextBox.Text.Split(dot);
                     //string[] wiersze = text.Split(dot);
-                    Count = 1;
+                    int i = 1;
                     foreach (var wiersz in wiersze)
                     {
-                        if (Count < 101)
+                        if (i < Count)
                         {
                             string[] ad = wiersz.Split(space);
                             if (ad.Length == 2)
@@ -170,7 +170,7 @@ namespace ArduionoRadar
                                     Angle = Convert.ToInt32(ad[0]);
                                     Distance = Convert.ToInt32(ad[1]);
 
-                                    QueryExectuded(Angle, Distance, Count);
+                                    QueryExectuded(Angle, Distance, i);
                                     Angle = 0;
                                     Distance = 0;
                                 }
@@ -185,23 +185,6 @@ namespace ArduionoRadar
                     }
                     TextBox.Clear();
                 }     
-                        
-                    //for (int i = 0; i < wiersze.Length; i++)
-                    //{
-                    //    string[] ad = wiersze[i].Split(space);
-                    //    if (ad.Length == 2)
-                    //    {
-                    //        if (ad[0] != "" && ad[1] != "")
-                    //        {
-                    //            Angle = Convert.ToInt32(ad[0]);
-                    //            Distance = Convert.ToInt32(ad[1]);
-
-                    //            QueryExectuded();
-                    //            Angle = 0;
-                    //            Distance = 0;
-                    //        }
-                    //    }
-                    //}
                     
             }
             catch (Exception es)
