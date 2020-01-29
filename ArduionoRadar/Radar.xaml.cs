@@ -24,6 +24,7 @@ namespace ArduionoRadar
         private int _distance;
         private int _id;
         private int _count;
+        private int _i;
 
         #endregion
 
@@ -49,6 +50,20 @@ namespace ArduionoRadar
         {
             get { return _count= int.Parse(ConfigurationManager.AppSettings["Count"]); }
             set { _count = value; }
+        }
+
+        public int MyInit
+        {
+            get { return _i; }
+            set { _i = value; }
+        }
+
+        public int Second
+        {
+            get
+            {
+                return int.Parse(ConfigurationManager.AppSettings["Second"]);
+            }
         }
 
         #endregion
@@ -88,6 +103,12 @@ namespace ArduionoRadar
                 {
                     _serialPort.Close();
                 }
+
+                if (_dispatcherTimer.IsEnabled == true)
+                {
+                    _dispatcherTimer.IsEnabled = false;
+                    ReciveButton.IsEnabled = true;
+                }
             }
             catch (Exception es)
             {
@@ -102,6 +123,8 @@ namespace ArduionoRadar
         /// <param name="e"></param>
         private void StopSendDB_Click(object sender, RoutedEventArgs e)
         {
+            StopSendButton.IsEnabled = false;
+            ReciveButton.IsEnabled = true;
             _dispatcherTimer.Stop();
         }
 
@@ -112,9 +135,11 @@ namespace ArduionoRadar
         /// <param name="e"></param>
         private void ReciveSend_Click(object sender, RoutedEventArgs e)
         {
-
-            _dispatcherTimer.Interval = TimeSpan.FromSeconds(1);//timer = 1 second
+            StopSendButton.IsEnabled = true;
+            ReciveButton.IsEnabled = false;
+            _dispatcherTimer.Interval = TimeSpan.FromSeconds(Second);//timer = 1 second
             _dispatcherTimer.Tick += _dispatcherTimer_Tick;
+            _dispatcherTimer.IsEnabled = true;
             _dispatcherTimer.Start();
             //RecivAndSend();
         }
@@ -143,7 +168,9 @@ namespace ArduionoRadar
                 MessageBox.Show("Error: " + es.Message, "ERROR");
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         private void RecivAndSend()
         {
             try
@@ -157,10 +184,10 @@ namespace ArduionoRadar
                     TextBox.Text = _serialPort.ReadExisting();
                     string[] wiersze = TextBox.Text.Split(dot);
                     //string[] wiersze = text.Split(dot);
-                    int i = 1;
+                    _i = 1;
                     foreach (var wiersz in wiersze)
                     {
-                        if (i < Count)
+                        if (_i < Count)
                         {
                             string[] ad = wiersz.Split(space);
                             if (ad.Length == 2)
@@ -170,16 +197,16 @@ namespace ArduionoRadar
                                     Angle = Convert.ToInt32(ad[0]);
                                     Distance = Convert.ToInt32(ad[1]);
 
-                                    QueryExectuded(Angle, Distance, i);
+                                    QueryExectuded(Angle, Distance, _i);
                                     Angle = 0;
                                     Distance = 0;
                                 }
                             }
-                            Count++;
+                            _i++;
                         }
                         else
                         {
-                            Count = 0;
+                            _i = 0;
                         }
 
                     }
@@ -224,7 +251,7 @@ namespace ArduionoRadar
                 _cmd.CommandText = "UPDATE arduino SET Angle=@Angle,Distance=@Distance WHERE id =@Id";
                 _cmd.Parameters.AddWithValue("@Angle", Angle);
                 _cmd.Parameters.AddWithValue("@Distance", Distance);
-                _cmd.Parameters.AddWithValue("@Id",Count);
+                _cmd.Parameters.AddWithValue("@Id", MyInit);
                 _cmd.ExecuteNonQuery();
             }
             catch (MySqlException es)
@@ -250,6 +277,19 @@ namespace ArduionoRadar
             GetConnection();
             DisConnectDBButton.IsEnabled = false;
             ConnectButton.IsEnabled = true;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_serialPort.IsOpen)
+            {
+                _serialPort.Close();
+            }
+
+            if (_mySqlConnection.State == ConnectionState.Open)
+            {
+                _mySqlConnection.Close();
+            }
         }
     }
 }

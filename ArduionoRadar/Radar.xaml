@@ -5,19 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ArduionoRadar"
         mc:Ignorable="d"
-        Title="Radar" Height="250" Width="480" ResizeMode="NoResize" Background="#FF341111" Loaded="Window_Loaded" >
+        Title="Radar" Height="250" Width="480" ResizeMode="NoResize" Background="#FF341111" Loaded="Window_Loaded" Closing="Window_Closing" >
     <Grid Margin="0,10,10,0" Height="199" VerticalAlignment="Top" HorizontalAlignment="Right" Width="452">
         <Button Name="ConnectButton" Width="110"  Height="40" Click="Connect_Click" HorizontalAlignment="Right" Margin="0,37,127,122" Background="#FFFF3D3D" BorderBrush="#FFFF3D3D">
             <Grid>
-                <TextBlock Text="ConnectDB" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="14"></TextBlock>
-                <Image Source=".\Icons\usb.png" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="30" Margin="0,0,72,0" ></Image>
+                <TextBlock Text="ConnectUSB" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,6,-25,6" FontSize="14"></TextBlock>
+                <Image Source=".\Icons\usb.png" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="30" Margin="-30,2,0,-1" />
 
             </Grid>
         </Button>
         <Button Name="DisConnectDBButton" Height="40" Click="DisConnectedDB_Click" Margin="335,37,2,122" FontSize="11" Background="#FFFF3D3D" BorderBrush="#FFFF3D3D">
             <Grid>
-                <TextBlock Text="DisConnect" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="14"></TextBlock>
-                <Image Source=".\Icons\usb.png" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="30" Margin="0,0,72,0" ></Image>
+                <TextBlock Text="DisConn.USB" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="-4,6,-30,6" FontSize="14"></TextBlock>
+                <Image Source=".\Icons\usb.png" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="30" Margin="-33,2,0,-1" ></Image>
             </Grid>
         </Button>
         <Button Name="ReciveButton"  Width="115" Height="40" Click="ReciveSend_Click" Margin="0,89,2,70" HorizontalAlignment="Right" Background="#FFFF3D3D" BorderBrush="#FFFF3D3D">
