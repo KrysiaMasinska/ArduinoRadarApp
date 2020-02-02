@@ -14,7 +14,7 @@ namespace ArduionoRadar
     public partial class Radar : Window
     {
         #region Private variable
-        private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
+        private readonly DispatcherTimer dispatcherTimer = new DispatcherTimer();
         private SerialPort _serialPort;
         private static readonly string _connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
         private readonly MySqlConnection _mySqlConnection = new MySqlConnection(_connectionString);
@@ -103,9 +103,9 @@ namespace ArduionoRadar
                     _serialPort.Close();
                 }
 
-                if (_dispatcherTimer.IsEnabled == true)
+                if (dispatcherTimer.IsEnabled == true)
                 {
-                    _dispatcherTimer.IsEnabled = false;
+                    dispatcherTimer.IsEnabled = false;
                     ReciveButton.IsEnabled = true;
                 }
             }
@@ -124,7 +124,7 @@ namespace ArduionoRadar
         {
             StopSendButton.IsEnabled = false;
             ReciveButton.IsEnabled = true;
-            _dispatcherTimer.Stop();
+            dispatcherTimer.Stop();
         }
 
         /// <summary>
@@ -136,10 +136,10 @@ namespace ArduionoRadar
         {
             StopSendButton.IsEnabled = true;
             ReciveButton.IsEnabled = false;
-            _dispatcherTimer.Interval = TimeSpan.FromSeconds(Second);//timer = 1 second
-            _dispatcherTimer.Tick += DispatcherTimer_Tick;
-            _dispatcherTimer.IsEnabled = true;
-            _dispatcherTimer.Start();
+            dispatcherTimer.Interval = TimeSpan.FromSeconds(Second);//timer = 1 second
+            dispatcherTimer.Tick += DispatcherTimer_Tick;
+            dispatcherTimer.IsEnabled = true;
+            dispatcherTimer.Start();
             //BindingExpression bindingExpression = txtWindowTitle.GetBindingExpression(TextBox.TextProperty);
             //RecivAndSend();
         }
@@ -208,11 +208,17 @@ namespace ArduionoRadar
                         else
                         {
                             _i = 0;
-                            txtWindowTitle.Clear();
+                            txtWindowTitle.Clear(); 
                         }
 
                     }
                     
+                }
+                else
+                {
+                    dispatcherTimer.Stop();
+                    MessageBox.Show("Open USB PORT", "INFORMATION");
+                    ReciveButton.IsEnabled = true;
                 }
                 
             }
