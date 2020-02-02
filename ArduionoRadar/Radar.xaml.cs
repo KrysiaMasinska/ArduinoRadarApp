@@ -1,6 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.IO.Ports;
@@ -15,15 +14,15 @@ namespace ArduionoRadar
     public partial class Radar : Window
     {
         #region Private variable
-        private DispatcherTimer _dispatcherTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
         private SerialPort _serialPort;
-        private static string _connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
-        private MySqlConnection _mySqlConnection = new MySqlConnection(_connectionString);
+        private static readonly string _connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
+        private readonly MySqlConnection _mySqlConnection = new MySqlConnection(_connectionString);
         private MySqlCommand _cmd;
         private int _angle;
         private int _distance;
         private int _id;
-        private int _count;
+        private int _count = int.Parse(ConfigurationManager.AppSettings["Count"]);
         private int _i;
 
         #endregion
@@ -48,7 +47,7 @@ namespace ArduionoRadar
 
         public int Count
         {
-            get { return _count= int.Parse(ConfigurationManager.AppSettings["Count"]); }
+            get { return _count; }
             set { _count = value; }
         }
 
@@ -138,13 +137,14 @@ namespace ArduionoRadar
             StopSendButton.IsEnabled = true;
             ReciveButton.IsEnabled = false;
             _dispatcherTimer.Interval = TimeSpan.FromSeconds(Second);//timer = 1 second
-            _dispatcherTimer.Tick += _dispatcherTimer_Tick;
+            _dispatcherTimer.Tick += DispatcherTimer_Tick;
             _dispatcherTimer.IsEnabled = true;
             _dispatcherTimer.Start();
+            //BindingExpression bindingExpression = txtWindowTitle.GetBindingExpression(TextBox.TextProperty);
             //RecivAndSend();
         }
 
-        private void _dispatcherTimer_Tick(object sender, EventArgs e)
+        private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
             RecivAndSend();
         }
@@ -178,12 +178,13 @@ namespace ArduionoRadar
                 if (_serialPort.IsOpen)//for test
                 {
 
-                    //string text = "76 34.32 34.56 78.";//for test
+                   // string text = "76 34.32 34.56 78.";//for test
                     char space = ' ';
                     char dot = '.';
-                    TextBox.Text = _serialPort.ReadExisting();
-                    string[] wiersze = TextBox.Text.Split(dot);
-                    //string[] wiersze = text.Split(dot);
+                    txtWindowTitle.Text = _serialPort.ReadExisting();
+                    //txtWindowTitle.Text += text;
+                    string[] wiersze = txtWindowTitle.Text.Split(dot);
+                    //string[] wiersze = text.Split(dot);  
                     _i = 1;
                     foreach (var wiersz in wiersze)
                     {
@@ -207,12 +208,13 @@ namespace ArduionoRadar
                         else
                         {
                             _i = 0;
+                            txtWindowTitle.Clear();
                         }
 
                     }
-                    TextBox.Clear();
-                }     
                     
+                }
+                
             }
             catch (Exception es)
             {
