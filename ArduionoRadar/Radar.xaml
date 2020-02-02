@@ -50,6 +50,6 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <TextBox x:Name="TextBox" HorizontalAlignment="Left" Height="90" Margin="15,90,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="305"/>
+        <TextBox x:Name="TextBox" HorizontalAlignment="Left" Height="90" Margin="15,90,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="305"/>
     </Grid>
 </Window>
