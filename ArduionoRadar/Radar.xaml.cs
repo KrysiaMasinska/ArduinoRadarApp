@@ -232,10 +232,9 @@ namespace ArduionoRadar
         {
             try
             {
-                _mySqlConnection.Open();
-                if (_mySqlConnection.State == ConnectionState.Open)
+                if (_mySqlConnection.State != ConnectionState.Open)
                 {
-
+                    _mySqlConnection.Open();
                     ConnectLabel.Foreground = System.Windows.Media.Brushes.Green;
                     ConnectLabel.Content = "Connected to database.";
                 }
@@ -278,6 +277,7 @@ namespace ArduionoRadar
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
             GetPorts();
+            GetConnection();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
