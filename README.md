@@ -1,3 +1,3 @@
 #ArduinoRadarApp
 
-This is my Arduino Radar App
+This is my backend for Arduino Radar App
